@@ -6,28 +6,20 @@
 #include <stdexcept>
 
 //генератор элементов для LazySequence
-//инкапсулирует правило порождения очередного элемента
-//существует в единственном экземпляре для каждого LazySequence
+//инкапсулирует правило порождения очередного элемента существует в единственном экземпляре для каждого LazySequence
 template <class T>
 class Generator {
 private:
-    //правило: смотрит на уже вычисленные элементы -> даёт следующий
     std::function<T(const MutableArraySequence<T>&)> rule;
-
-    //очередь фиксированной длины для хранения "окна" предыдущих элементов
-    //нужна когда правило использует только k последних элементов
-    //не храним всю историю — только сколько нужно для следующего шага
-    MutableArraySequence<T> window;
+    MutableArraySequence<T> window;//не храним всю историю только сколько нужно для следующего шага
     int windowSize;
-
     bool hasRule;
 
 public:
     //генератор без правила (для конечных последовательностей)
     Generator() : windowSize(0), hasRule(false) {}
 
-    //генератор с правилом — получает весь кэш
-    //используй когда правило смотрит на произвольные предыдущие элементы
+    //генератор с правилом ( весь кэш)
     explicit Generator(std::function<T(const MutableArraySequence<T>&)> generatorRule)
             : rule(generatorRule), windowSize(0), hasRule(true) {}
 

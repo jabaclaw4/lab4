@@ -63,7 +63,6 @@ public:
     MutableArraySequence<T>* SortSequence(const Sequence<T>* input) {
         //поток чтения из входной последовательности
         ReadOnlyStream<T> inStream(input);
-        //результат
         MutableArraySequence<T>* result = new MutableArraySequence<T>();
         WriteOnlyStream<T> outStream(result);
 
@@ -78,7 +77,7 @@ public:
         return result;
     }
 
-    //удобный вариант: сортировать LazySequence первых count элементов
+    //сортировка LazySequence первых count элементов
     MutableArraySequence<T>* SortLazy(LazySequence<T>* input, int count) {
         if (count <= 0) {
             throw std::invalid_argument("count must be positive");

@@ -7,14 +7,12 @@
 
 //минимальная бинарная куча (min-heap)
 //родитель всегда <= детей, значит минимум всегда на вершине
-//хранение в массиве: родитель i -> дети 2i+1 и 2i+2, родитель элемента i -> (i-1)/2
 template <class T>
 class BinaryHeap {
 private:
     MutableArraySequence<T> data;
     //логический размер кучи — элементы за этой границей игнорируются
-    //это ключевое отличие от прошлой версии: физически массив не уменьшается
-    int heapSize;
+    int heapSize; //физически массив не уменьшается
     std::function<bool(const T&, const T&)> less;
 
     int parentIndex(int i) const {
@@ -84,10 +82,10 @@ public:
     //O(log n)
     void Insert(const T& item) {
         if (heapSize < data.GetLength()) {
-            //есть место в уже выделенном массиве — просто записываем
+            //есть место в уже выделенном массиве просто записываем
             data.Set(heapSize, item);
         } else {
-            //массив заполнен — расширяем
+            //массив заполнен расширяемс
             data.Append(item);
         }
         siftUp(heapSize);
@@ -103,8 +101,7 @@ public:
         return data.Get(0);
     }
 
-    //извлечь минимум
-    //O(log n) — никакого пересоздания массива
+    //O(log n) без пересоздания массива
     T ExtractMin() {
         if (heapSize == 0) {
             throw std::out_of_range("heap is empty");
@@ -130,7 +127,7 @@ public:
         return heapSize == 0;
     }
 
-    //сбросить кучу (не освобождает память — для переиспользования)
+    //сбросить кучу (не освобождает память то есть для переиспользования) типа память уже выделена повторно нен надо
     void Clear() {
         heapSize = 0;
     }
