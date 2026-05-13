@@ -8,9 +8,9 @@
 template <class T>
 class LazySequence {
 private:
-    MutableArraySequence<T> cache;
-    Generator<T> generator;
-    bool isInfinite;
+    MutableArraySequence<T> cache;//уже вычисл
+    Generator<T> generator;//праивло вычисл следщ
+    bool isInfinite; //беск или нет
 
     void materializeUpTo(int index) {
         while (cache.GetLength() <= index) {
@@ -96,7 +96,8 @@ public:
         return result;
     }
 
-    T Reduce(std::function<T(T, T)> func, T initial, int count) {
+    T Reduce(std::function<T(T, T)> func, T initial, int count) {//сворачивает список в одно значение по правилу например сумма 5 сисео первых
+
         T result = initial;
         for (int i = 0; i < count; i++) {
             result = func(result, Get(i));

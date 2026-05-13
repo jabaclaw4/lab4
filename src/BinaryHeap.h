@@ -4,16 +4,15 @@
 #include "MutableArraySequence.h"
 #include <functional>
 #include <stdexcept>
-
-//минимальная бинарная куча (min-heap)
-//родитель всегда <= детей, значит минимум всегда на вершине
+//сама сортировочка
+//минимальная бинарная куча (min-heap) родитель всегда <= детей значит минимум всегда на вершине
 template <class T>
 class BinaryHeap {
 private:
     MutableArraySequence<T> data;
-    //логический размер кучи — элементы за этой границей игнорируются
-    int heapSize; //физически массив не уменьшается
-    std::function<bool(const T&, const T&)> less;
+    //логический размер кучи элементы за этой границей игнорируются
+    int heapSize; //физически массив не уменьшается просто колво которое видит куча
+    std::function<bool(const T&, const T&)> less;//определяет че значит меньше
 
     int parentIndex(int i) const {
         return (i - 1) / 2;

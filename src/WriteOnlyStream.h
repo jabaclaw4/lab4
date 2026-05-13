@@ -7,32 +7,22 @@
 #include <fstream>
 #include <string>
 
-//поток только для записи
-//пишем элементы последовательно в конец
-//назначением может быть: MutableArraySequence, файл
+//поток только для записи пишем элементы последовательно в конец
 template <class T>
 class WriteOnlyStream {
 public:
-    //тип назначения
-    enum class TargetType {
+    enum class TargetType {//тип у которого есть фиксированный набор значений
         ToSequence,
         ToFile
     };
 
 private:
     TargetType targetType;
-
-    //назначение 1: последовательность в памяти
     MutableArraySequence<T>* seqTarget;
-
-    //назначение 2: файл
-    std::ofstream fileTarget;
-    //функция сериализации: T -> строка
+    std::ofstream fileTarget;    //файл
+    //функция сериализации T в строка   WriteOnlyStream не знает что такое T знает только что serializer умеет превратить любой T в строку
     std::function<std::string(const T&)> serializer;
-
-    //сколько элементов записано
-    int position;
-
+    int position;//сколько элементов записано уже
     bool isOpen;
 
 public:
@@ -44,8 +34,6 @@ public:
               isOpen(false) {}
 
     //создать поток в файл
-    //serializer: как превратить T в строку
-    //пример для int: [](const int& x) { return std::to_string(x); }
     WriteOnlyStream(const std::string& filename,
                     std::function<std::string(const T&)> serializer)
             : targetType(TargetType::ToFile),
@@ -85,8 +73,7 @@ public:
         }
     }
 
-    //записать элемент в конец потока
-    //возвращает позицию следующей записи
+    //записать элемент в конец потока возвращает позицию следующей записи
     int Write(const T& item) {
         if (!isOpen) {
             throw std::runtime_error("stream is not open");
@@ -102,7 +89,6 @@ public:
                 throw std::runtime_error("file write error");
             }
         }
-
         position++;
         return position;
     }
