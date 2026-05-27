@@ -1,6 +1,6 @@
 CMakeFiles/lab3.dir/tests/test_utils.cpp.obj: \
- C:\Users\jabaclaw4\CLionProjects\lab3n\tests\test_utils.cpp \
- C:/Users/jabaclaw4/CLionProjects/lab3n/src/test_utils.h \
+ C:\Users\User\CLionProjects\lab4\tests\test_utils.cpp \
+ C:/Users/User/CLionProjects/lab4/src/test_utils.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \

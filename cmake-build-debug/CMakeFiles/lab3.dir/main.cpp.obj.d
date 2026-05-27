@@ -1,5 +1,5 @@
 CMakeFiles/lab3.dir/main.cpp.obj: \
- C:\Users\jabaclaw4\CLionProjects\lab3n\main.cpp \
+ C:\Users\User\CLionProjects\lab4\main.cpp \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -143,33 +143,51 @@ CMakeFiles/lab3.dir/main.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/istream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/istream.tcc \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/MutableVector.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/VectorBase.h \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cmath \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/x86_64-w64-mingw32/include/math.h \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/specfun.h \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/gamma.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/special_function_util.h \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/bessel_function.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/beta_function.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/ell_integral.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/exp_integral.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/hypergeometric.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/legendre_function.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/modified_bessel_func.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/poly_hermite.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/poly_laguerre.tcc \
- C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/riemann_zeta.tcc \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/Vector.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/ResultInfo.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/Sequence.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/Complex.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/MutableArraySequence.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/ArraySequenceBase.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/DynamicArray.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/ImmutableVector.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/ImmutableArraySequence.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/Complex.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/SquareMatrix.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/Matrix.h \
- C:\Users\jabaclaw4\CLionProjects\lab3n\src/all_tests.h
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
+ C:\Users\User\CLionProjects\lab4\src/LazySequence.h \
+ C:\Users\User\CLionProjects\lab4\src/Sequence.h \
+ C:\Users\User\CLionProjects\lab4\src/ResultInfo.h \
+ C:\Users\User\CLionProjects\lab4\src/MutableArraySequence.h \
+ C:\Users\User\CLionProjects\lab4\src/ArraySequenceBase.h \
+ C:\Users\User\CLionProjects\lab4\src/DynamicArray.h \
+ C:\Users\User\CLionProjects\lab4\src/Generator.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/functional \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_function.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_map \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_map.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/hashtable.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/hashtable_policy.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/aligned_buffer.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/enable_special_members.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/node_handle.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/erase_if.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_uninitialized.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_vector.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_bvector.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/vector.tcc \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/compare \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_algo.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/algorithmfwd.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_heap.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uniform_int_dist.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tempbuf.h \
+ C:\Users\User\CLionProjects\lab4\src/Cardinal.h \
+ C:\Users\User\CLionProjects\lab4\src/Generator.h \
+ C:\Users\User\CLionProjects\lab4\src/BinaryHeap.h \
+ C:\Users\User\CLionProjects\lab4\src/HeapSorter.h \
+ C:\Users\User\CLionProjects\lab4\src/BinaryHeap.h \
+ C:\Users\User\CLionProjects\lab4\src/ReadOnlyStream.h \
+ C:\Users\User\CLionProjects\lab4\src/LazySequence.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/fstream \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/codecvt.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
+ C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fstream.tcc \
+ C:\Users\User\CLionProjects\lab4\src/WriteOnlyStream.h \
+ C:\Users\User\CLionProjects\lab4\src/ReadOnlyStream.h \
+ C:\Users\User\CLionProjects\lab4\src/WriteOnlyStream.h \
+ C:\Users\User\CLionProjects\lab4\src/MutableArraySequence.h \
+ C:\Users\User\CLionProjects\lab4\src/Cardinal.h \
+ C:\Users\User\CLionProjects\lab4\src/all_tests.h

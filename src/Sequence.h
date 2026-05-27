@@ -87,7 +87,7 @@ public:
         return ResultInfo<T>::Success(this->Get(index));
     }
 
-    //найти первый элемент, удовлетворяющий условию (без исключения если не найден)
+    //найти первый элемент удовлетворяющий условию (без исключения если не найден)
     virtual ResultInfo<T> TryFind(bool (*predicate)(T)) const {
         for (int i = 0; i < this->GetLength(); i++) {
             T item = this->Get(i);

@@ -1,198 +1,122 @@
 #include <iostream>
-#include <limits>//для обработки ошибок если ввели не то
-#include "src/MutableVector.h"
-#include "src/ImmutableVector.h"
-#include "src/Complex.h"
-#include "src/SquareMatrix.h"
+#include <limits>
+#include <cstdlib>
+#include <ctime>
+#include "src/LazySequence.h"
+#include "src/Generator.h"
+#include "src/BinaryHeap.h"
+#include "src/HeapSorter.h"
+#include "src/ReadOnlyStream.h"
+#include "src/WriteOnlyStream.h"
+#include "src/MutableArraySequence.h"
+#include "src/Cardinal.h"
 #include "src/all_tests.h"
 
 using namespace std;
 
-Vector<int>* g_vec_int = nullptr; //без этого вектор создался бы и сразу удалился нельзя было бы работать с ним в следующих операциях
-Vector<double>* g_vec_double = nullptr;
-Vector<Complex>* g_vec_complex = nullptr;
+LazySequence<int>*    g_lazy    = nullptr;
+BinaryHeap<int>*      g_heap    = nullptr;
 
-SquareMatrix<int>* g_matrix_int = nullptr;// то же самое для матрицы
-SquareMatrix<double>* g_matrix_double = nullptr;
+enum ActiveType { NONE, LAZY_FINITE, LAZY_INFINITE };
+ActiveType g_active = NONE;
 
-enum VectorType { NONE, INT, DOUBLE, COMPLEX };
-VectorType g_current_type = NONE;
-//чтобы понимать какой вектор именно сейчас активен и че выводить
+
+void clear_lazy() {
+    if (g_lazy != nullptr) { delete g_lazy; g_lazy = nullptr; }
+    g_active = NONE;
+}
+
+void clear_heap() {
+    if (g_heap != nullptr) { delete g_heap; g_heap = nullptr; }
+}
+
+void print_lazy_n(LazySequence<int>* seq, int n) {
+    cout << "[ ";
+    for (int i = 0; i < n; i++) {
+        cout << seq->Get(i);
+        if (i < n - 1) cout << ", ";
+    }
+    cout << " ]" << endl;
+}
+
+void print_heap_sorted(BinaryHeap<int>& heap) {
+    // печатаем не разрушая оригинал те копируем
+    BinaryHeap<int> copy = heap;
+    cout << "[ ";
+    bool first = true;
+    while (!copy.IsEmpty()) {
+        if (!first) cout << ", ";
+        cout << copy.ExtractMin();
+        first = false;
+    }
+    cout << " ]" << endl;
+}
+
+
 void print_menu() {
     cout << "\n========================================" << endl;
-    cout << "           LAB 3 - MENU" << endl;
+    cout << "          LAB 4 - MENU" << endl;
     cout << "========================================" << endl;
 
-    cout << "\n=== CREATE VECTORS ===" << endl;
-    cout << "1  - Create MutableVector<int>" << endl;
-    cout << "2  - Create ImmutableVector<int>" << endl;
-    cout << "3  - Create MutableVector<double>" << endl;
-    cout << "4  - Create ImmutableVector<double>" << endl;
-    cout << "5  - Create MutableVector<Complex>" << endl;
-    cout << "6  - Create ImmutableVector<Complex>" << endl;
+    cout << "\n=== LAZY SEQUENCE ===" << endl;
+    cout << "1  - Create finite LazySequence (from input)" << endl;
+    cout << "2  - Create infinite: Fibonacci" << endl;
+    cout << "3  - Create infinite: Natural numbers (1,2,3,...)" << endl;
+    cout << "4  - Create infinite: Powers of 2" << endl;
+    cout << "5  - Get element by index" << endl;
+    cout << "6  - Print first N elements" << endl;
+    cout << "7  - GetSubsequence [start, end]" << endl;
+    cout << "8  - Map (* scalar)" << endl;
+    cout << "9  - Where (filter even/odd)" << endl;
+    cout << "10 - Concat two lazy sequences" << endl;
+    cout << "11 - Reduce (sum, first N elements)" << endl;
+    cout << "12 - GetCardinalLength" << endl;
+    cout << "13 - GetMaterializedCount" << endl;
 
-    cout << "\n=== VECTOR OPERATIONS ===" << endl;
-    cout << "7  - Get element by index" << endl;
-    cout << "8  - Set element (Mutable only)" << endl;
-    cout << "9  - Print vector" << endl;
-    cout << "10 - Add two vectors" << endl;
-    cout << "11 - Multiply by scalar" << endl;
-    cout << "12 - Calculate Norm" << endl;
-    cout << "13 - Dot product" << endl;
-    cout << "14 - TryGet (safe access with ResultInfo)" << endl;
+    cout << "\n=== BINARY HEAP ===" << endl;
+    cout << "14 - Create empty BinaryHeap" << endl;
+    cout << "15 - Insert element" << endl;
+    cout << "16 - GetMin" << endl;
+    cout << "17 - ExtractMin" << endl;
+    cout << "18 - Print heap (sorted order)" << endl;
+    cout << "19 - GetSize / IsEmpty" << endl;
+    cout << "20 - Clear heap" << endl;
 
-    cout << "\n=== CREATE MATRICES ===" << endl;
-    cout << "15 - Create SquareMatrix<int>" << endl;
-    cout << "16 - Create SquareMatrix<double>" << endl;
+    cout << "\n=== HEAP SORTER (streams) ===" << endl;
+    cout << "21 - Sort finite LazySequence via HeapSorter" << endl;
+    cout << "22 - Sort from input array via HeapSorter" << endl;
+    cout << "23 - Sort descending from input array" << endl;
 
-    cout << "\n=== MATRIX OPERATIONS ===" << endl;
-    cout << "17 - Print matrix" << endl;
-    cout << "18 - Get element [i][j]" << endl;
-    cout << "19 - Set element [i][j]" << endl;
-    cout << "20 - Add two matrices" << endl;
-    cout << "21 - Multiply by scalar" << endl;
-    cout << "22 - Calculate norm" << endl;
-    cout << "23 - Swap rows" << endl;
-    cout << "24 - Multiply row by scalar" << endl;
-    cout << "25 - Add row to row" << endl;
-    cout << "26 - Swap columns" << endl;
+    cout << "\n=== STREAMS ===" << endl;
+    cout << "24 - ReadOnlyStream: read N elements from active LazySequence" << endl;
+    cout << "25 - WriteOnlyStream: write N random ints, print result" << endl;
 
-    cout << "\n=== DEMOS & TESTS ===" << endl;
-    cout << "30 - Vector operators demo" << endl;
-    cout << "31 - Matrix demo" << endl;
-    cout << "32 - Run ALL tests" << endl;
+    cout << "\n=== CARDINAL ===" << endl;
+    cout << "26 - Cardinal demo (finite vs infinite)" << endl;
 
-    cout << "\n0 - Exit" << endl;
+    cout << "\n=== TESTS ===" << endl;
+    cout << "30 - Run ALL tests" << endl;
+
+    cout << "\n0  - Exit" << endl;
     cout << "========================================" << endl;
     cout << "Choice: ";
 }
 
-void clear_current_vector() {
-    if (g_vec_int != nullptr) {
-        delete g_vec_int;
-        g_vec_int = nullptr;
-    }
-    if (g_vec_double != nullptr) {
-        delete g_vec_double;
-        g_vec_double = nullptr;
-    }
-    if (g_vec_complex != nullptr) {
-        delete g_vec_complex;
-        g_vec_complex = nullptr;
-    }
-    g_current_type = NONE;
-}
-
-void clear_current_matrix() {
-    if (g_matrix_int != nullptr) {
-        delete g_matrix_int;
-        g_matrix_int = nullptr;
-    }
-    if (g_matrix_double != nullptr) {
-        delete g_matrix_double;
-        g_matrix_double = nullptr;
-    }
-}
-
-void test_operators_demo() {
-    cout << "\n=== DEMO: Vector Operators ===" << endl;
-
-    int arr1[] = {1, 2, 3};
-    int arr2[] = {4, 5, 6};
-
-    MutableVector<int> v1(arr1, 3);
-    MutableVector<int> v2(arr2, 3);
-
-    cout << "v1 = " << v1 << endl;
-    cout << "v2 = " << v2 << endl;
-
-    cout << "\nOperator []: v1[1] = " << v1[1] << endl;
-
-    Vector<int>* v3 = v1.Add(v2);
-    cout << "v1 + v2 = " << *v3 << endl;
-
-    cout << "||v1|| = " << v1.Norm() << endl;
-
-    int dot = v1.DotProduct(v2);
-    cout << "v1 · v2 = " << dot << endl;
-
-    Vector<int>* v4 = v1.MultiplyByScalar(2);
-    cout << "2 * v1 = " << *v4 << endl;
-
-    cout << "\n=== Double vectors ===" << endl;
-    double arr3[] = {1.5, 2.5, 3.5};
-    MutableVector<double> vd(arr3, 3);
-    cout << "vd = " << vd << endl;
-    cout << "||vd|| = " << vd.Norm() << endl;
-
-    cout << "\n=== Complex vectors ===" << endl;
-    Complex c1(1, 2);
-    Complex c2(3, 4);
-    Complex arr4[] = {c1, c2};
-    MutableVector<Complex> vc(arr4, 2);
-    cout << "vc = " << vc << endl;
-    cout << "||vc|| = " << vc.Norm() << endl;
-
-    delete v3;
-    delete v4;
-}
-
-void test_matrix_demo() {
-    cout << "\n=== DEMO: Square Matrix ===" << endl;
-
-    SquareMatrix<int> m(3);
-
-    cout << "Creating 3x3 matrix..." << endl;
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            m.Set(i, j, i * 3 + j + 1);
-        }
-    }
-
-    cout << "Matrix m:" << endl;
-    cout << m << endl;
-
-    cout << "\nNorm of m: " << m.Norm() << endl;
-
-    cout << "\nSwapping rows 0 and 2..." << endl;
-    m.SwapRows(0, 2);
-    cout << "After swap:" << endl;
-    cout << m << endl;
-
-    cout << "\nMultiplying row 1 by 2..." << endl;
-    m.MultiplyRow(1, 2);
-    cout << "After multiply:" << endl;
-    cout << m << endl;
-
-    SquareMatrix<int> m2(3);
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            m2.Set(i, j, 1);
-        }
-    }
-
-    cout << "\nMatrix m2 (all ones):" << endl;
-    cout << m2 << endl;
-
-    Matrix<int>* m3 = m.Add(m2);
-    cout << "\nm + m2:" << endl;
-    cout << *m3 << endl;
-
-    delete m3;
-}
 
 int main() {
-    int choice;
+    srand((unsigned)time(nullptr));
+
     cout << "\n========================================" << endl;
-    cout << "       LABORATORY WORK #3" << endl;
-    cout << "   Vector & Matrix Operations" << endl;
+    cout << "       LABORATORY WORK #4" << endl;
+    cout << "  LazySequence, Heap, Streams, Sort" << endl;
     cout << "========================================\n" << endl;
 
+    int choice;
     while (true) {
         print_menu();
 
         if (!(cin >> choice)) {
-            cout << "\nERROR: Invalid input! Please enter a number." << endl;
+            cout << "\nERROR: Invalid input!" << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             continue;
@@ -204,1140 +128,422 @@ int main() {
         }
 
         switch (choice) {
+
             case 1: {
-                clear_current_vector();
+                clear_lazy();
                 int size;
-                cout << "Enter vector size: ";
+                cout << "Enter size: ";
                 if (!(cin >> size) || size < 0) {
                     cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
                 }
-
-                if (size == 0) {
-                    g_vec_int = new MutableVector<int>();
-                } else {
-                    int* arr = new int[size];
-                    cout << "Enter " << size << " integers:" << endl;
-                    for (int i = 0; i < size; i++) {
-                        cout << "Element " << i << ": ";
-                        if (!(cin >> arr[i])) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_1;
-                        }
+                int* arr = new int[size];
+                cout << "Enter " << size << " integers:" << endl;
+                for (int i = 0; i < size; i++) {
+                    cout << "  [" << i << "]: ";
+                    if (!(cin >> arr[i])) {
+                        cout << "ERROR: Invalid input!" << endl;
+                        cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        delete[] arr;
+                        goto end_case_1;
                     }
-                    g_vec_int = new MutableVector<int>(arr, size);
-                    delete[] arr;
                 }
-
-                g_current_type = INT;
-                cout << "OK: Created MutableVector<int>" << endl;
-                cout << "Vector: " << *g_vec_int << endl;
+                g_lazy = new LazySequence<int>(arr, size);
+                delete[] arr;
+                g_active = LAZY_FINITE;
+                cout << "OK: Created finite LazySequence, length = " << size << endl;
                 end_case_1:
                 break;
             }
 
             case 2: {
-                clear_current_vector();
-                int size;
-                cout << "Enter vector size: ";
-                if (!(cin >> size) || size < 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (size == 0) {
-                    g_vec_int = new ImmutableVector<int>();
-                } else {
-                    int* arr = new int[size];
-                    cout << "Enter " << size << " integers:" << endl;
-                    for (int i = 0; i < size; i++) {
-                        cout << "Element " << i << ": ";
-                        if (!(cin >> arr[i])) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_2;
-                        }
-                    }
-                    g_vec_int = new ImmutableVector<int>(arr, size);
-                    delete[] arr;
-                }
-
-                g_current_type = INT;
-                cout << "OK: Created ImmutableVector<int>" << endl;
-                cout << "Vector: " << *g_vec_int << endl;
-                end_case_2:
+                clear_lazy();
+                int seed[] = {0, 1};
+                auto fib_rule = [](const MutableArraySequence<int>& cache) -> int {
+                    int n = cache.GetLength();
+                    return cache.Get(n - 1) + cache.Get(n - 2);
+                };
+                g_lazy = new LazySequence<int>(
+                        Generator<int>(fib_rule, 2), seed, 2, true
+                );
+                g_active = LAZY_INFINITE;
+                cout << "OK: Created infinite Fibonacci LazySequence" << endl;
+                cout << "First 10: "; print_lazy_n(g_lazy, 10);
                 break;
             }
 
             case 3: {
-                clear_current_vector();
-                int size;
-                cout << "Enter vector size: ";
-                if (!(cin >> size) || size < 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (size == 0) {
-                    g_vec_double = new MutableVector<double>();
-                } else {
-                    double* arr = new double[size];
-                    cout << "Enter " << size << " doubles:" << endl;
-                    for (int i = 0; i < size; i++) {
-                        cout << "Element " << i << ": ";
-                        if (!(cin >> arr[i])) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_3;
-                        }
-                    }
-                    g_vec_double = new MutableVector<double>(arr, size);
-                    delete[] arr;
-                }
-
-                g_current_type = DOUBLE;
-                cout << "OK: Created MutableVector<double>" << endl;
-                cout << "Vector: " << *g_vec_double << endl;
-                end_case_3:
+                clear_lazy();
+                //натуральные числа
+                auto nat_rule = [](const MutableArraySequence<int>& cache) -> int {
+                    return cache.GetLength() + 1;
+                };
+                g_lazy = new LazySequence<int>(Generator<int>(nat_rule), true);
+                g_active = LAZY_INFINITE;
+                cout << "OK: Created infinite Natural numbers LazySequence" << endl;
+                cout << "First 10: "; print_lazy_n(g_lazy, 10);
                 break;
             }
 
             case 4: {
-                clear_current_vector();
-                int size;
-                cout << "Enter vector size: ";
-                if (!(cin >> size) || size < 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (size == 0) {
-                    g_vec_double = new ImmutableVector<double>();
-                } else {
-                    double* arr = new double[size];
-                    cout << "Enter " << size << " doubles:" << endl;
-                    for (int i = 0; i < size; i++) {
-                        cout << "Element " << i << ": ";
-                        if (!(cin >> arr[i])) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_4;
-                        }
-                    }
-                    g_vec_double = new ImmutableVector<double>(arr, size);
-                    delete[] arr;
-                }
-
-                g_current_type = DOUBLE;
-                cout << "OK: Created ImmutableVector<double>" << endl;
-                cout << "Vector: " << *g_vec_double << endl;
-                end_case_4:
+                clear_lazy();
+                //степени двойки
+                auto pow2_rule = [](const MutableArraySequence<int>& cache) -> int {
+                    int n = cache.GetLength();
+                    return cache.Get(n - 1) * 2;
+                };
+                int seed[] = {1};
+                g_lazy = new LazySequence<int>(
+                        Generator<int>(pow2_rule, 1), seed, 1, true
+                );
+                g_active = LAZY_INFINITE;
+                cout << "OK: Created infinite Powers-of-2 LazySequence" << endl;
+                cout << "First 10: "; print_lazy_n(g_lazy, 10);
                 break;
             }
 
             case 5: {
-                clear_current_vector();
-                int size;
-                cout << "Enter vector size: ";
-                if (!(cin >> size) || size < 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int idx;
+                cout << "Enter index: ";
+                if (!(cin >> idx) || idx < 0) {
+                    cout << "ERROR: Invalid index!" << endl;
+                    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
                 }
-
-                if (size == 0) {
-                    g_vec_complex = new MutableVector<Complex>();
-                } else {
-                    Complex* arr = new Complex[size];
-                    cout << "Enter " << size << " complex numbers (real imag):" << endl;
-                    for (int i = 0; i < size; i++) {
-                        double real, imag;
-                        cout << "Element " << i << " (real imag): ";
-                        if (!(cin >> real >> imag)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_5;
-                        }
-                        arr[i] = Complex(real, imag);
-                    }
-                    g_vec_complex = new MutableVector<Complex>(arr, size);
-                    delete[] arr;
+                try {
+                    cout << "Get(" << idx << ") = " << g_lazy->Get(idx) << endl;
+                } catch (const exception& e) {
+                    cout << "ERROR: " << e.what() << endl;
                 }
-
-                g_current_type = COMPLEX;
-                cout << "OK: Created MutableVector<Complex>" << endl;
-                cout << "Vector: " << *g_vec_complex << endl;
-                end_case_5:
                 break;
             }
 
             case 6: {
-                clear_current_vector();
-                int size;
-                cout << "Enter vector size: ";
-                if (!(cin >> size) || size < 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int n;
+                cout << "Print first N elements, enter N: ";
+                if (!(cin >> n) || n <= 0) {
+                    cout << "ERROR: Invalid N!" << endl;
+                    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
                 }
-
-                if (size == 0) {
-                    g_vec_complex = new ImmutableVector<Complex>();
-                } else {
-                    Complex* arr = new Complex[size];
-                    cout << "Enter " << size << " complex numbers (real imag):" << endl;
-                    for (int i = 0; i < size; i++) {
-                        double real, imag;
-                        cout << "Element " << i << " (real imag): ";
-                        if (!(cin >> real >> imag)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete[] arr;
-                            goto end_case_6;
-                        }
-                        arr[i] = Complex(real, imag);
-                    }
-                    g_vec_complex = new ImmutableVector<Complex>(arr, size);
-                    delete[] arr;
-                }
-
-                g_current_type = COMPLEX;
-                cout << "OK: Created ImmutableVector<Complex>" << endl;
-                cout << "Vector: " << *g_vec_complex << endl;
-                end_case_6:
+                print_lazy_n(g_lazy, n);
+                cout << "Materialized count: " << g_lazy->GetMaterializedCount() << endl;
                 break;
             }
 
             case 7: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                int index;
-                cout << "Enter index: ";
-                if (!(cin >> index)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int s, e;
+                cout << "Enter start index: "; cin >> s;
+                cout << "Enter end index:   "; cin >> e;
                 try {
-                    if (g_current_type == INT) {
-                        cout << "vec[" << index << "] = " << g_vec_int->Get(index) << endl;
-                    } else if (g_current_type == DOUBLE) {
-                        cout << "vec[" << index << "] = " << g_vec_double->Get(index) << endl;
-                    } else if (g_current_type == COMPLEX) {
-                        cout << "vec[" << index << "] = " << g_vec_complex->Get(index) << endl;
+                    Sequence<int>* sub = g_lazy->GetSubsequence(s, e);
+                    cout << "Subsequence [" << s << ".." << e << "]: [ ";
+                    for (int i = 0; i < sub->GetLength(); i++) {
+                        cout << sub->Get(i);
+                        if (i < sub->GetLength() - 1) cout << ", ";
                     }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
+                    cout << " ]" << endl;
+                    delete sub;
+                } catch (const exception& ex) {
+                    cout << "ERROR: " << ex.what() << endl;
                 }
                 break;
             }
 
             case 8: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                int index;
-                cout << "Enter index: ";
-                if (!(cin >> index)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_current_type == INT) {
-                        MutableVector<int>* mv = dynamic_cast<MutableVector<int>*>(g_vec_int);
-                        if (mv == nullptr) {
-                            cout << "ERROR: Vector is immutable!" << endl;
-                            break;
-                        }
-                        int value;
-                        cout << "Enter new value: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        mv->Set(index, value);
-                        cout << "OK: Set vec[" << index << "] = " << value << endl;
-                    } else if (g_current_type == DOUBLE) {
-                        MutableVector<double>* mv = dynamic_cast<MutableVector<double>*>(g_vec_double);
-                        if (mv == nullptr) {
-                            cout << "ERROR: Vector is immutable!" << endl;
-                            break;
-                        }
-                        double value;
-                        cout << "Enter new value: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        mv->Set(index, value);
-                        cout << "OK: Set vec[" << index << "] = " << value << endl;
-                    } else if (g_current_type == COMPLEX) {
-                        MutableVector<Complex>* mv = dynamic_cast<MutableVector<Complex>*>(g_vec_complex);
-                        if (mv == nullptr) {
-                            cout << "ERROR: Vector is immutable!" << endl;
-                            break;
-                        }
-                        double real, imag;
-                        cout << "Enter new value (real imag): ";
-                        if (!(cin >> real >> imag)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        mv->Set(index, Complex(real, imag));
-                        cout << "OK: Set vec[" << index << "] = " << Complex(real, imag) << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int scalar, n;
+                cout << "Enter scalar: "; cin >> scalar;
+                cout << "Print first N elements after Map: "; cin >> n;
+                int sc = scalar;
+                Sequence<int>* mapped = g_lazy->Map([](int x) -> int { return x; }); // placeholder
+                //Map через лямбду нельзя напрямую поэтому используем свой вариант
+                //и создаём новую LazySequence вручную через генератор
+                delete mapped;
+                LazySequence<int>* src = g_lazy;
+                auto map_rule = [src, sc](int i) -> int {
+                    return src->Get(i) * sc;
+                };
+                LazySequence<int>* result = new LazySequence<int>(
+                        Generator<int>::FromIndexFunction(map_rule),
+                        g_active == LAZY_INFINITE
+                );
+                cout << "Map(x * " << scalar << "), first " << n << ": ";
+                print_lazy_n(result, n);
+                delete result;
                 break;
             }
 
             case 9: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                if (g_current_type == INT) {
-                    cout << "Vector: " << *g_vec_int << endl;
-                    cout << "Size: " << g_vec_int->GetSize() << endl;
-                } else if (g_current_type == DOUBLE) {
-                    cout << "Vector: " << *g_vec_double << endl;
-                    cout << "Size: " << g_vec_double->GetSize() << endl;
-                } else if (g_current_type == COMPLEX) {
-                    cout << "Vector: " << *g_vec_complex << endl;
-                    cout << "Size: " << g_vec_complex->GetSize() << endl;
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int choice2, n;
+                cout << "Filter: 1 - even, 2 - odd: "; cin >> choice2;
+                cout << "How many matching elements to print: "; cin >> n;
+                try {
+                    LazySequence<int>* filtered;
+                    if (choice2 == 1) {
+                        filtered = g_lazy->Where([](int x) { return x % 2 == 0; }, n * 10);
+                    } else {
+                        filtered = g_lazy->Where([](int x) { return x % 2 != 0; }, n * 10);
+                    }
+                    int len = filtered->GetLength();
+                    int print_count = (len < n) ? len : n;
+                    cout << "First " << print_count << " filtered: ";
+                    print_lazy_n(filtered, print_count);
+                    delete filtered;
+                } catch (const exception& ex) {
+                    cout << "ERROR: " << ex.what() << endl;
                 }
                 break;
             }
 
             case 10: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int size2;
+                cout << "Enter size of second sequence: "; cin >> size2;
+                int* arr2 = new int[size2];
+                for (int i = 0; i < size2; i++) {
+                    cout << "  [" << i << "]: "; cin >> arr2[i];
                 }
-
-                cout << "Create second vector (same type and size):" << endl;
-
+                LazySequence<int> second(arr2, size2);
+                delete[] arr2;
+                int n;
+                cout << "Print first N elements of concat: "; cin >> n;
                 try {
-                    if (g_current_type == INT) {
-                        int size = g_vec_int->GetSize();
-                        int* arr = new int[size];
-                        cout << "Enter " << size << " integers:" << endl;
-                        for (int i = 0; i < size; i++) {
-                            cout << "Element " << i << ": ";
-                            if (!(cin >> arr[i])) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_10;
-                            }
+                    Sequence<int>* cat = g_lazy->Concat(&second);
+                    LazySequence<int>* lazyCat = dynamic_cast<LazySequence<int>*>(cat);
+                    if (lazyCat) {
+                        print_lazy_n(lazyCat, n);
+                    } else {
+                        cout << "[ ";
+                        for (int i = 0; i < n && i < cat->GetLength(); i++) {
+                            cout << cat->Get(i);
+                            if (i < n - 1) cout << ", ";
                         }
-                        MutableVector<int> v2(arr, size);
-                        delete[] arr;
-
-                        Vector<int>* result = g_vec_int->Add(v2);
-                        cout << "vec1 = " << *g_vec_int << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 + vec2 = " << *result << endl;
-                        delete result;
-                    } else if (g_current_type == DOUBLE) {
-                        int size = g_vec_double->GetSize();
-                        double* arr = new double[size];
-                        cout << "Enter " << size << " doubles:" << endl;
-                        for (int i = 0; i < size; i++) {
-                            cout << "Element " << i << ": ";
-                            if (!(cin >> arr[i])) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_10;
-                            }
-                        }
-                        MutableVector<double> v2(arr, size);
-                        delete[] arr;
-
-                        Vector<double>* result = g_vec_double->Add(v2);
-                        cout << "vec1 = " << *g_vec_double << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 + vec2 = " << *result << endl;
-                        delete result;
-                    } else if (g_current_type == COMPLEX) {
-                        int size = g_vec_complex->GetSize();
-                        Complex* arr = new Complex[size];
-                        cout << "Enter " << size << " complex numbers (real imag):" << endl;
-                        for (int i = 0; i < size; i++) {
-                            double real, imag;
-                            cout << "Element " << i << " (real imag): ";
-                            if (!(cin >> real >> imag)) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_10;
-                            }
-                            arr[i] = Complex(real, imag);
-                        }
-                        MutableVector<Complex> v2(arr, size);
-                        delete[] arr;
-
-                        Vector<Complex>* result = g_vec_complex->Add(v2);
-                        cout << "vec1 = " << *g_vec_complex << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 + vec2 = " << *result << endl;
-                        delete result;
+                        cout << " ]" << endl;
                     }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
+                    delete cat;
+                } catch (const exception& ex) {
+                    cout << "ERROR: " << ex.what() << endl;
                 }
-                end_case_10:
                 break;
             }
 
             case 11: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int n;
+                cout << "Reduce (sum) first N elements, enter N: "; cin >> n;
                 try {
-                    if (g_current_type == INT) {
-                        int scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        Vector<int>* result = g_vec_int->MultiplyByScalar(scalar);
-                        cout << "vec = " << *g_vec_int << endl;
-                        cout << scalar << " * vec = " << *result << endl;
-                        delete result;
-                    } else if (g_current_type == DOUBLE) {
-                        double scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        Vector<double>* result = g_vec_double->MultiplyByScalar(scalar);
-                        cout << "vec = " << *g_vec_double << endl;
-                        cout << scalar << " * vec = " << *result << endl;
-                        delete result;
-                    } else if (g_current_type == COMPLEX) {
-                        double real, imag;
-                        cout << "Enter scalar (real imag): ";
-                        if (!(cin >> real >> imag)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        Complex scalar(real, imag);
-                        Vector<Complex>* result = g_vec_complex->MultiplyByScalar(scalar);
-                        cout << "vec = " << *g_vec_complex << endl;
-                        cout << scalar << " * vec = " << *result << endl;
-                        delete result;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
+                    int sum = g_lazy->Reduce([](int a, int b) { return a + b; }, 0, n);
+                    cout << "Sum of first " << n << " elements = " << sum << endl;
+                } catch (const exception& ex) {
+                    cout << "ERROR: " << ex.what() << endl;
                 }
                 break;
             }
 
             case 12: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                double norm;
-                if (g_current_type == INT) {
-                    norm = g_vec_int->Norm();
-                } else if (g_current_type == DOUBLE) {
-                    norm = g_vec_double->Norm();
-                } else if (g_current_type == COMPLEX) {
-                    norm = g_vec_complex->Norm();
-                }
-
-                cout << "||vec|| = " << norm << endl;
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                Cardinal card = g_lazy->GetCardinalLength();
+                cout << "CardinalLength = " << card.ToString() << endl;
                 break;
             }
 
             case 13: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                cout << "Create second vector (same type and size):" << endl;
-
-                try {
-                    if (g_current_type == INT) {
-                        int size = g_vec_int->GetSize();
-                        int* arr = new int[size];
-                        cout << "Enter " << size << " integers:" << endl;
-                        for (int i = 0; i < size; i++) {
-                            cout << "Element " << i << ": ";
-                            if (!(cin >> arr[i])) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_13;
-                            }
-                        }
-                        MutableVector<int> v2(arr, size);
-                        delete[] arr;
-
-                        int result = g_vec_int->DotProduct(v2);
-                        cout << "vec1 = " << *g_vec_int << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 · vec2 = " << result << endl;
-                    } else if (g_current_type == DOUBLE) {
-                        int size = g_vec_double->GetSize();
-                        double* arr = new double[size];
-                        cout << "Enter " << size << " doubles:" << endl;
-                        for (int i = 0; i < size; i++) {
-                            cout << "Element " << i << ": ";
-                            if (!(cin >> arr[i])) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_13;
-                            }
-                        }
-                        MutableVector<double> v2(arr, size);
-                        delete[] arr;
-
-                        double result = g_vec_double->DotProduct(v2);
-                        cout << "vec1 = " << *g_vec_double << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 · vec2 = " << result << endl;
-                    } else if (g_current_type == COMPLEX) {
-                        int size = g_vec_complex->GetSize();
-                        Complex* arr = new Complex[size];
-                        cout << "Enter " << size << " complex numbers (real imag):" << endl;
-                        for (int i = 0; i < size; i++) {
-                            double real, imag;
-                            cout << "Element " << i << " (real imag): ";
-                            if (!(cin >> real >> imag)) {
-                                cout << "ERROR: Invalid input!" << endl;
-                                cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                delete[] arr;
-                                goto end_case_13;
-                            }
-                            arr[i] = Complex(real, imag);
-                        }
-                        MutableVector<Complex> v2(arr, size);
-                        delete[] arr;
-
-                        Complex result = g_vec_complex->DotProduct(v2);
-                        cout << "vec1 = " << *g_vec_complex << endl;
-                        cout << "vec2 = " << v2 << endl;
-                        cout << "vec1 · vec2 = " << result << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
-                end_case_13:
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                cout << "MaterializedCount = " << g_lazy->GetMaterializedCount() << endl;
                 break;
             }
 
             case 14: {
-                if (g_current_type == NONE) {
-                    cout << "ERROR: Create vector first!" << endl;
-                    break;
-                }
-
-                int index;
-                cout << "Enter index: ";
-                if (!(cin >> index)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                if (g_current_type == INT) {
-                    ResultInfo<int> result = g_vec_int->TryGet(index);
-
-                    if (result.IsSuccess()) {
-                        cout << "OK: Success! vec[" << index << "] = " << result.GetValue() << endl;
-                    } else {
-                        cout << "ERROR: " << result.GetError() << endl;
-                    }
-                } else if (g_current_type == DOUBLE) {
-                    ResultInfo<double> result = g_vec_double->TryGet(index);
-
-                    if (result.IsSuccess()) {
-                        cout << "OK: Success! vec[" << index << "] = " << result.GetValue() << endl;
-                    } else {
-                        cout << "ERROR: " << result.GetError() << endl;
-                    }
-                } else if (g_current_type == COMPLEX) {
-                    ResultInfo<Complex> result = g_vec_complex->TryGet(index);
-
-                    if (result.IsSuccess()) {
-                        cout << "OK: Success! vec[" << index << "] = " << result.GetValue() << endl;
-                    } else {
-                        cout << "ERROR: " << result.GetError() << endl;
-                    }
-                }
+                clear_heap();
+                g_heap = new BinaryHeap<int>();
+                cout << "OK: Created empty BinaryHeap<int> (min-heap)" << endl;
                 break;
             }
 
             case 15: {
-                clear_current_matrix();
-                int size;
-                cout << "Enter matrix size (n for n×n): ";
-                if (!(cin >> size) || size <= 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (g_heap == nullptr) { cout << "ERROR: No active heap! Create one first (14)." << endl; break; }
+                int val;
+                cout << "Enter value to insert: ";
+                if (!(cin >> val)) {
+                    cout << "ERROR: Invalid input!" << endl;
+                    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
                 }
-
-                g_matrix_int = new SquareMatrix<int>(size);
-
-                cout << "Enter " << size*size << " integers (row by row):" << endl;
-                for (int i = 0; i < size; i++) {
-                    for (int j = 0; j < size; j++) {
-                        int value;
-                        cout << "Element [" << i << "][" << j << "]: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete g_matrix_int;
-                            g_matrix_int = nullptr;
-                            goto end_case_15;
-                        }
-                        g_matrix_int->Set(i, j, value);
-                    }
-                }
-
-                cout << "OK: Created SquareMatrix<int>" << endl;
-                cout << "Matrix:" << endl;
-                cout << *g_matrix_int << endl;
-                end_case_15:
+                g_heap->Insert(val);
+                cout << "OK: Inserted " << val << ", heap size = " << g_heap->GetSize() << endl;
                 break;
             }
 
             case 16: {
-                clear_current_matrix();
-                int size;
-                cout << "Enter matrix size (n for n×n): ";
-                if (!(cin >> size) || size <= 0) {
-                    cout << "ERROR: Invalid size!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
+                if (g_heap == nullptr || g_heap->IsEmpty()) {
+                    cout << "ERROR: Heap is empty or not created!" << endl; break;
                 }
-
-                g_matrix_double = new SquareMatrix<double>(size);
-
-                cout << "Enter " << size*size << " doubles (row by row):" << endl;
-                for (int i = 0; i < size; i++) {
-                    for (int j = 0; j < size; j++) {
-                        double value;
-                        cout << "Element [" << i << "][" << j << "]: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            delete g_matrix_double;
-                            g_matrix_double = nullptr;
-                            goto end_case_16;
-                        }
-                        g_matrix_double->Set(i, j, value);
-                    }
-                }
-
-                cout << "OK: Created SquareMatrix<double>" << endl;
-                cout << "Matrix:" << endl;
-                cout << *g_matrix_double << endl;
-                end_case_16:
+                cout << "GetMin() = " << g_heap->GetMin() << endl;
                 break;
             }
 
             case 17: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
+                if (g_heap == nullptr || g_heap->IsEmpty()) {
+                    cout << "ERROR: Heap is empty or not created!" << endl; break;
                 }
-
-                if (g_matrix_int != nullptr) {
-                    cout << "Matrix<int>:" << endl;
-                    cout << *g_matrix_int << endl;
-                    cout << "Size: " << g_matrix_int->GetSize() << "×" << g_matrix_int->GetSize() << endl;
-                } else if (g_matrix_double != nullptr) {
-                    cout << "Matrix<double>:" << endl;
-                    cout << *g_matrix_double << endl;
-                    cout << "Size: " << g_matrix_double->GetSize() << "×" << g_matrix_double->GetSize() << endl;
-                }
+                int val = g_heap->ExtractMin();
+                cout << "ExtractMin() = " << val << ", remaining size = " << g_heap->GetSize() << endl;
                 break;
             }
 
             case 18: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
+                if (g_heap == nullptr || g_heap->IsEmpty()) {
+                    cout << "ERROR: Heap is empty or not created!" << endl; break;
                 }
-
-                int row, col;
-                cout << "Enter row: ";
-                if (!(cin >> row)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-                cout << "Enter column: ";
-                if (!(cin >> col)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        cout << "matrix[" << row << "][" << col << "] = " << g_matrix_int->Get(row, col) << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        cout << "matrix[" << row << "][" << col << "] = " << g_matrix_double->Get(row, col) << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                cout << "Heap (sorted order): ";
+                print_heap_sorted(*g_heap);
                 break;
             }
 
             case 19: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
-                }
-
-                int row, col;
-                cout << "Enter row: ";
-                if (!(cin >> row)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-                cout << "Enter column: ";
-                if (!(cin >> col)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        int value;
-                        cout << "Enter value: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_int->Set(row, col, value);
-                        cout << "OK: Set matrix[" << row << "][" << col << "] = " << value << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        double value;
-                        cout << "Enter value: ";
-                        if (!(cin >> value)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_double->Set(row, col, value);
-                        cout << "OK: Set matrix[" << row << "][" << col << "] = " << value << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                if (g_heap == nullptr) { cout << "ERROR: No active heap!" << endl; break; }
+                cout << "Size    = " << g_heap->GetSize() << endl;
+                cout << "IsEmpty = " << (g_heap->IsEmpty() ? "true" : "false") << endl;
                 break;
             }
 
             case 20: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
-                }
-
-                cout << "Create second matrix (same type and size):" << endl;
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        int size = g_matrix_int->GetSize();
-                        SquareMatrix<int> m2(size);
-
-                        cout << "Enter " << size*size << " integers (row by row):" << endl;
-                        for (int i = 0; i < size; i++) {
-                            for (int j = 0; j < size; j++) {
-                                int value;
-                                cout << "Element [" << i << "][" << j << "]: ";
-                                if (!(cin >> value)) {
-                                    cout << "ERROR: Invalid input!" << endl;
-                                    cin.clear();
-                                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                    goto end_case_20;
-                                }
-                                m2.Set(i, j, value);
-                            }
-                        }
-
-                        Matrix<int>* result = g_matrix_int->Add(m2);
-                        cout << "matrix1 = " << *g_matrix_int << endl;
-                        cout << "matrix2 = " << m2 << endl;
-                        cout << "matrix1 + matrix2 = " << *result << endl;
-                        delete result;
-                    } else if (g_matrix_double != nullptr) {
-                        int size = g_matrix_double->GetSize();
-                        SquareMatrix<double> m2(size);
-
-                        cout << "Enter " << size*size << " doubles (row by row):" << endl;
-                        for (int i = 0; i < size; i++) {
-                            for (int j = 0; j < size; j++) {
-                                double value;
-                                cout << "Element [" << i << "][" << j << "]: ";
-                                if (!(cin >> value)) {
-                                    cout << "ERROR: Invalid input!" << endl;
-                                    cin.clear();
-                                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                    goto end_case_20;
-                                }
-                                m2.Set(i, j, value);
-                            }
-                        }
-
-                        Matrix<double>* result = g_matrix_double->Add(m2);
-                        cout << "matrix1 = " << *g_matrix_double << endl;
-                        cout << "matrix2 = " << m2 << endl;
-                        cout << "matrix1 + matrix2 = " << *result << endl;
-                        delete result;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
-                end_case_20:
+                if (g_heap == nullptr) { cout << "ERROR: No active heap!" << endl; break; }
+                g_heap->Clear();
+                cout << "OK: Heap cleared (size = 0)" << endl;
                 break;
             }
 
             case 21: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
+                if (g_lazy == nullptr || g_active != LAZY_FINITE) {
+                    cout << "ERROR: Need active finite LazySequence (create with option 1)!" << endl;
                     break;
                 }
-
                 try {
-                    if (g_matrix_int != nullptr) {
-                        int scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        Matrix<int>* result = g_matrix_int->MultiplyByScalar(scalar);
-                        cout << "matrix = " << *g_matrix_int << endl;
-                        cout << scalar << " * matrix = " << *result << endl;
-                        delete result;
-                    } else if (g_matrix_double != nullptr) {
-                        double scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        Matrix<double>* result = g_matrix_double->MultiplyByScalar(scalar);
-                        cout << "matrix = " << *g_matrix_double << endl;
-                        cout << scalar << " * matrix = " << *result << endl;
-                        delete result;
+                    int len = g_lazy->GetLength();
+                    MutableArraySequence<int> output;
+                    ReadOnlyStream<int>  in(g_lazy, len);
+                    WriteOnlyStream<int> out(&output);
+                    in.Open(); out.Open();
+                    HeapSorter<int> sorter([](int a, int b){ return a < b; });
+                    sorter.Sort(in, out);
+                    in.Close(); out.Close();
+                    cout << "Sorted: [ ";
+                    for (int i = 0; i < output.GetLength(); i++) {
+                        cout << output.Get(i);
+                        if (i < output.GetLength() - 1) cout << ", ";
                     }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
+                    cout << " ]" << endl;
+                } catch (const exception& ex) {
+                    cout << "ERROR: " << ex.what() << endl;
                 }
                 break;
             }
 
-            case 22: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
-                }
-
-                double norm;
-                if (g_matrix_int != nullptr) {
-                    norm = g_matrix_int->Norm();
-                } else {
-                    norm = g_matrix_double->Norm();
-                }
-
-                cout << "||matrix|| = " << norm << endl;
-                break;
-            }
-
+            case 22:
             case 23: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
+                int size;
+                cout << "Enter array size: ";
+                if (!(cin >> size) || size <= 0) {
+                    cout << "ERROR: Invalid size!" << endl;
+                    cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     break;
                 }
-
-                int row1, row2;
-                cout << "Enter first row: ";
-                if (!(cin >> row1)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
+                MutableArraySequence<int> input;
+                cout << "Enter " << size << " integers:" << endl;
+                for (int i = 0; i < size; i++) {
+                    int v; cout << "  [" << i << "]: "; cin >> v;
+                    input.Append(v);
                 }
-                cout << "Enter second row: ";
-                if (!(cin >> row2)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
+                MutableArraySequence<int> output;
+                ReadOnlyStream<int>  in(&input);
+                WriteOnlyStream<int> out(&output);
+                in.Open(); out.Open();
+                bool asc = (choice == 22);
+                HeapSorter<int> sorter(asc
+                                       ? function<bool(const int&,const int&)>([](int a, int b){ return a < b; })
+                                       : function<bool(const int&,const int&)>([](int a, int b){ return a > b; })
+                );
+                sorter.Sort(in, out);
+                in.Close(); out.Close();
+                cout << "Sorted " << (asc ? "ascending" : "descending") << ": [ ";
+                for (int i = 0; i < output.GetLength(); i++) {
+                    cout << output.Get(i);
+                    if (i < output.GetLength() - 1) cout << ", ";
                 }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        g_matrix_int->SwapRows(row1, row2);
-                        cout << "OK: Swapped rows " << row1 << " and " << row2 << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_int << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        g_matrix_double->SwapRows(row1, row2);
-                        cout << "OK: Swapped rows " << row1 << " and " << row2 << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_double << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                cout << " ]" << endl;
                 break;
             }
 
             case 24: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
+                if (g_lazy == nullptr) { cout << "ERROR: No active LazySequence!" << endl; break; }
+                int n;
+                cout << "How many elements to read from stream: "; cin >> n;
+                ReadOnlyStream<int> in(g_lazy, n);
+                in.Open();
+                cout << "Reading " << n << " elements: [ ";
+                for (int i = 0; i < n; i++) {
+                    cout << in.Read();
+                    if (i < n - 1) cout << ", ";
                 }
-
-                int row;
-                cout << "Enter row: ";
-                if (!(cin >> row)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        int scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_int->MultiplyRow(row, scalar);
-                        cout << "OK: Multiplied row " << row << " by " << scalar << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_int << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        double scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_double->MultiplyRow(row, scalar);
-                        cout << "OK: Multiplied row " << row << " by " << scalar << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_double << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                cout << " ]" << endl;
+                cout << "Stream position: " << in.GetPosition() << endl;
+                in.Close();
                 break;
             }
 
             case 25: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
+                int n;
+                cout << "How many random ints to write: "; cin >> n;
+                MutableArraySequence<int> buf;
+                WriteOnlyStream<int> out(&buf);
+                out.Open();
+                for (int i = 0; i < n; i++) {
+                    out.Write(rand() % 100);
                 }
-
-                int sourceRow, targetRow;
-                cout << "Enter source row: ";
-                if (!(cin >> sourceRow)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
+                out.Close();
+                cout << "Written " << buf.GetLength() << " elements: [ ";
+                for (int i = 0; i < buf.GetLength(); i++) {
+                    cout << buf.Get(i);
+                    if (i < buf.GetLength() - 1) cout << ", ";
                 }
-                cout << "Enter target row: ";
-                if (!(cin >> targetRow)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        int scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_int->AddRowToRow(sourceRow, targetRow, scalar);
-                        cout << "OK: Added row " << sourceRow << " * " << scalar << " to row " << targetRow << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_int << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        double scalar;
-                        cout << "Enter scalar: ";
-                        if (!(cin >> scalar)) {
-                            cout << "ERROR: Invalid input!" << endl;
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            break;
-                        }
-                        g_matrix_double->AddRowToRow(sourceRow, targetRow, scalar);
-                        cout << "OK: Added row " << sourceRow << " * " << scalar << " to row " << targetRow << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_double << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                cout << " ]" << endl;
                 break;
             }
 
             case 26: {
-                if (g_matrix_int == nullptr && g_matrix_double == nullptr) {
-                    cout << "ERROR: Create matrix first!" << endl;
-                    break;
-                }
-
-                int col1, col2;
-                cout << "Enter first column: ";
-                if (!(cin >> col1)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-                cout << "Enter second column: ";
-                if (!(cin >> col2)) {
-                    cout << "ERROR: Invalid input!" << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    break;
-                }
-
-                try {
-                    if (g_matrix_int != nullptr) {
-                        g_matrix_int->SwapCols(col1, col2);
-                        cout << "OK: Swapped columns " << col1 << " and " << col2 << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_int << endl;
-                    } else if (g_matrix_double != nullptr) {
-                        g_matrix_double->SwapCols(col1, col2);
-                        cout << "OK: Swapped columns " << col1 << " and " << col2 << endl;
-                        cout << "Matrix:" << endl;
-                        cout << *g_matrix_double << endl;
-                    }
-                } catch (exception& e) {
-                    cout << "ERROR: " << e.what() << endl;
-                }
+                cout << "\n=== Cardinal Demo ===" << endl;
+                Cardinal c5(5);
+                Cardinal c10(10);
+                Cardinal inf = Cardinal::Infinity();
+                cout << "c5  = " << c5.ToString()  << endl;
+                cout << "c10 = " << c10.ToString() << endl;
+                cout << "inf = " << inf.ToString()  << endl;
+                cout << "c5 < c10  : " << (c5 < c10  ? "true" : "false") << endl;
+                cout << "c10 < inf : " << (c10 < inf  ? "true" : "false") << endl;
+                cout << "inf < c5  : " << (inf < c5   ? "true" : "false") << endl;
+                cout << "inf == inf: " << (inf == Cardinal::Infinity() ? "true" : "false") << endl;
                 break;
             }
 
             case 30: {
-                test_operators_demo();
-                break;
-            }
-
-            case 31: {
-                test_matrix_demo();
-                break;
-            }
-
-            case 32: {
                 run_all_tests();
                 break;
             }
 
             default:
-                cout << "ERROR: Invalid choice!" << endl;
+                cout << "ERROR: Unknown option!" << endl;
+                break;
         }
     }
 
-    clear_current_vector();
-    clear_current_matrix();
+    clear_lazy();
+    clear_heap();
     return 0;
 }

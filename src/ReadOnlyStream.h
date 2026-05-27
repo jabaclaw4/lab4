@@ -7,9 +7,7 @@
 #include <stdexcept>
 #include <fstream>
 
-//поток только для чтения
-//чтение = продвижение вперёд, прочитанный элемент "уходит"
-//источником может быть: LazySequence, Sequence, файл
+//поток только для чтения ,чтение = продвижение вперёд прочитанный элемент уходит какбы
 template <class T>
 class ReadOnlyStream {
 public:
@@ -22,21 +20,14 @@ public:
 
 private:
     SourceType sourceType;
-
-    //источник 1: ленивая последовательность
     LazySequence<T>* lazySource;
-
-    //источник 2: обычная последовательность
     const Sequence<T>* seqSource;
-
-    //источник 3: файл
     std::ifstream fileSource;
     //функция десериализации: строка -> T
     std::function<T(const std::string&)> deserializer;
 
-    //текущая позиция (сколько элементов прочитано)
+    //текущая позиция сколько элементов прочитано
     int position;
-
     //для конечных источников — сколько всего элементов
     //-1 означает бесконечный источник (LazySequence infinite)
     int totalCount;
@@ -45,7 +36,6 @@ private:
 
 public:
     //создать из LazySequence
-    //count: сколько элементов читать (-1 = бесконечно)
     ReadOnlyStream(LazySequence<T>* lazy, int count = -1)
             : sourceType(SourceType::FromLazySequence),
               lazySource(lazy),
@@ -63,9 +53,7 @@ public:
               totalCount(seq->GetLength()),
               isOpen(false) {}
 
-    //создать из файла
-    //deserializer: как превратить строку в T
-    //пример для int: [](const std::string& s) { return std::stoi(s); }
+    //deserializer как превратить строку в T
     ReadOnlyStream(const std::string& filename,
                    std::function<T(const std::string&)> deserializer)
             : sourceType(SourceType::FromFile),
@@ -120,7 +108,6 @@ public:
     }
 
     //прочитать следующий элемент и сдвинуться вперёд
-    //сложность O(1) для Sequence и LazySequence (если в кэше)
     T Read() {
         if (!isOpen) {
             throw std::runtime_error("stream is not open");
@@ -150,7 +137,6 @@ public:
         return result;
     }
 
-    //текущая позиция (сколько элементов уже прочитано)
     int GetPosition() const {
         return position;
     }
@@ -160,7 +146,7 @@ public:
         return sourceType != SourceType::FromFile;
     }
 
-    //перейти на позицию index (только если IsCanSeek())
+    //перейти на позицию index только если IsCanSeek()
     void Seek(int index) {
         if (!IsCanSeek()) {
             throw std::runtime_error("seek is not supported for file streams");

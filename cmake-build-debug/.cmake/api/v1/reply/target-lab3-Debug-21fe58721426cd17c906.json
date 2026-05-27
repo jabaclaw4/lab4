@@ -57,11 +57,7 @@
 				2,
 				3,
 				4,
-				5,
-				6,
-				7,
-				8,
-				9
+				5
 			]
 		}
 	],
@@ -103,11 +99,7 @@
 				2,
 				3,
 				4,
-				5,
-				6,
-				7,
-				8,
-				9
+				5
 			]
 		}
 	],
@@ -134,43 +126,19 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "tests/test_complex.cpp",
+			"path" : "tests/test_heap_sorter.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "tests/test_vector.cpp",
+			"path" : "tests/test_lazy_sequence.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "tests/test_result_info.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "tests/test_matrix.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "tests/test_square_matrix.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "tests/test_range_filters.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "tests/test_vector_functional.cpp",
+			"path" : "tests/test_streams.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

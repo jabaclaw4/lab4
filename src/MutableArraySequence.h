@@ -2,8 +2,7 @@
 #define MUTABLE_ARRAY_SEQUENCE_H
 
 #include "ArraySequenceBase.h"
-
-//изменяемая последовательность на базе массива
+//изменяемая послед ть на базе массива
 template <class T>
 class MutableArraySequence : public ArraySequenceBase<T> {
 protected:
@@ -17,11 +16,14 @@ protected:
     }
 
 public:
-    //конструкторы
     MutableArraySequence() : ArraySequenceBase<T>() {}
     MutableArraySequence(T* items, int count) : ArraySequenceBase<T>(items, count) {}
     MutableArraySequence(int size) : ArraySequenceBase<T>(size) {}
     MutableArraySequence(const MutableArraySequence<T>& other) : ArraySequenceBase<T>(other) {}
+
+    void Set(int index, const T& value) {
+        this->items->Set(index, value);
+    }
 };
 
 #endif

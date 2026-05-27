@@ -22,10 +22,21 @@ public:
     //генератор с правилом ( весь кэш)
     explicit Generator(std::function<T(const MutableArraySequence<T>&)> generatorRule)//запрещает неявное преобразование при создании объекта:
             : rule(generatorRule), windowSize(0), hasRule(true) {}
+
     //генератор с правилом и фиксированным окном k элементов  эффективнее по памяти например фибоначи не нужно хранить весь кэш
     Generator(std::function<T(const MutableArraySequence<T>&)> generatorRule,
               int k)
             : rule(generatorRule), windowSize(k), hasRule(true) {}
+
+    //генератор из индексной функции Get(i) вычисляется независимо от истории
+    //используется в Map Concat где i-й элемент не зависит от предыдущих
+    //длина кэша в момент вызова = текущий запрашиваемый индекс
+    static Generator<T> FromIndexFunction(std::function<T(int)> indexFn) {
+        auto wrappedRule = [indexFn](const MutableArraySequence<T>& cache) -> T {
+            return indexFn(cache.GetLength());
+        };
+        return Generator<T>(wrappedRule);
+    }
 
     //породить следующий элемент
     //cache все что уже посчиталась в лэзи

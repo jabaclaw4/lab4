@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion2024.1.4\bin\cmake\win\x64\bin\cmake.exe" 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\jabaclaw4\CLionProjects\lab3n
+CMAKE_SOURCE_DIR = C:\Users\User\CLionProjects\lab4
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\jabaclaw4\CLionProjects\lab3n\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\User\CLionProjects\lab4\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jabaclaw4\CLionProjects\lab3n\cmake-build-debug\CMakeFiles C:\Users\jabaclaw4\CLionProjects\lab3n\cmake-build-debug\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\User\CLionProjects\lab4\cmake-build-debug\CMakeFiles C:\Users\User\CLionProjects\lab4\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\jabaclaw4\CLionProjects\lab3n\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\User\CLionProjects\lab4\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -176,125 +176,77 @@ tests/run_all_tests.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/run_all_tests.cpp.s
 .PHONY : tests/run_all_tests.cpp.s
 
-tests/test_complex.obj: tests/test_complex.cpp.obj
-.PHONY : tests/test_complex.obj
+tests/test_heap_sorter.obj: tests/test_heap_sorter.cpp.obj
+.PHONY : tests/test_heap_sorter.obj
 
 # target to build an object file
-tests/test_complex.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_complex.cpp.obj
-.PHONY : tests/test_complex.cpp.obj
+tests/test_heap_sorter.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.obj
+.PHONY : tests/test_heap_sorter.cpp.obj
 
-tests/test_complex.i: tests/test_complex.cpp.i
-.PHONY : tests/test_complex.i
+tests/test_heap_sorter.i: tests/test_heap_sorter.cpp.i
+.PHONY : tests/test_heap_sorter.i
 
 # target to preprocess a source file
-tests/test_complex.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_complex.cpp.i
-.PHONY : tests/test_complex.cpp.i
+tests/test_heap_sorter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.i
+.PHONY : tests/test_heap_sorter.cpp.i
 
-tests/test_complex.s: tests/test_complex.cpp.s
-.PHONY : tests/test_complex.s
+tests/test_heap_sorter.s: tests/test_heap_sorter.cpp.s
+.PHONY : tests/test_heap_sorter.s
 
 # target to generate assembly for a file
-tests/test_complex.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_complex.cpp.s
-.PHONY : tests/test_complex.cpp.s
+tests/test_heap_sorter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.s
+.PHONY : tests/test_heap_sorter.cpp.s
 
-tests/test_matrix.obj: tests/test_matrix.cpp.obj
-.PHONY : tests/test_matrix.obj
+tests/test_lazy_sequence.obj: tests/test_lazy_sequence.cpp.obj
+.PHONY : tests/test_lazy_sequence.obj
 
 # target to build an object file
-tests/test_matrix.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_matrix.cpp.obj
-.PHONY : tests/test_matrix.cpp.obj
+tests/test_lazy_sequence.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.obj
+.PHONY : tests/test_lazy_sequence.cpp.obj
 
-tests/test_matrix.i: tests/test_matrix.cpp.i
-.PHONY : tests/test_matrix.i
+tests/test_lazy_sequence.i: tests/test_lazy_sequence.cpp.i
+.PHONY : tests/test_lazy_sequence.i
 
 # target to preprocess a source file
-tests/test_matrix.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_matrix.cpp.i
-.PHONY : tests/test_matrix.cpp.i
+tests/test_lazy_sequence.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.i
+.PHONY : tests/test_lazy_sequence.cpp.i
 
-tests/test_matrix.s: tests/test_matrix.cpp.s
-.PHONY : tests/test_matrix.s
+tests/test_lazy_sequence.s: tests/test_lazy_sequence.cpp.s
+.PHONY : tests/test_lazy_sequence.s
 
 # target to generate assembly for a file
-tests/test_matrix.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_matrix.cpp.s
-.PHONY : tests/test_matrix.cpp.s
+tests/test_lazy_sequence.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.s
+.PHONY : tests/test_lazy_sequence.cpp.s
 
-tests/test_range_filters.obj: tests/test_range_filters.cpp.obj
-.PHONY : tests/test_range_filters.obj
+tests/test_streams.obj: tests/test_streams.cpp.obj
+.PHONY : tests/test_streams.obj
 
 # target to build an object file
-tests/test_range_filters.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_range_filters.cpp.obj
-.PHONY : tests/test_range_filters.cpp.obj
+tests/test_streams.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_streams.cpp.obj
+.PHONY : tests/test_streams.cpp.obj
 
-tests/test_range_filters.i: tests/test_range_filters.cpp.i
-.PHONY : tests/test_range_filters.i
-
-# target to preprocess a source file
-tests/test_range_filters.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_range_filters.cpp.i
-.PHONY : tests/test_range_filters.cpp.i
-
-tests/test_range_filters.s: tests/test_range_filters.cpp.s
-.PHONY : tests/test_range_filters.s
-
-# target to generate assembly for a file
-tests/test_range_filters.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_range_filters.cpp.s
-.PHONY : tests/test_range_filters.cpp.s
-
-tests/test_result_info.obj: tests/test_result_info.cpp.obj
-.PHONY : tests/test_result_info.obj
-
-# target to build an object file
-tests/test_result_info.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_result_info.cpp.obj
-.PHONY : tests/test_result_info.cpp.obj
-
-tests/test_result_info.i: tests/test_result_info.cpp.i
-.PHONY : tests/test_result_info.i
+tests/test_streams.i: tests/test_streams.cpp.i
+.PHONY : tests/test_streams.i
 
 # target to preprocess a source file
-tests/test_result_info.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_result_info.cpp.i
-.PHONY : tests/test_result_info.cpp.i
+tests/test_streams.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_streams.cpp.i
+.PHONY : tests/test_streams.cpp.i
 
-tests/test_result_info.s: tests/test_result_info.cpp.s
-.PHONY : tests/test_result_info.s
-
-# target to generate assembly for a file
-tests/test_result_info.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_result_info.cpp.s
-.PHONY : tests/test_result_info.cpp.s
-
-tests/test_square_matrix.obj: tests/test_square_matrix.cpp.obj
-.PHONY : tests/test_square_matrix.obj
-
-# target to build an object file
-tests/test_square_matrix.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_square_matrix.cpp.obj
-.PHONY : tests/test_square_matrix.cpp.obj
-
-tests/test_square_matrix.i: tests/test_square_matrix.cpp.i
-.PHONY : tests/test_square_matrix.i
-
-# target to preprocess a source file
-tests/test_square_matrix.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_square_matrix.cpp.i
-.PHONY : tests/test_square_matrix.cpp.i
-
-tests/test_square_matrix.s: tests/test_square_matrix.cpp.s
-.PHONY : tests/test_square_matrix.s
+tests/test_streams.s: tests/test_streams.cpp.s
+.PHONY : tests/test_streams.s
 
 # target to generate assembly for a file
-tests/test_square_matrix.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_square_matrix.cpp.s
-.PHONY : tests/test_square_matrix.cpp.s
+tests/test_streams.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_streams.cpp.s
+.PHONY : tests/test_streams.cpp.s
 
 tests/test_utils.obj: tests/test_utils.cpp.obj
 .PHONY : tests/test_utils.obj
@@ -320,54 +272,6 @@ tests/test_utils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_utils.cpp.s
 .PHONY : tests/test_utils.cpp.s
 
-tests/test_vector.obj: tests/test_vector.cpp.obj
-.PHONY : tests/test_vector.obj
-
-# target to build an object file
-tests/test_vector.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector.cpp.obj
-.PHONY : tests/test_vector.cpp.obj
-
-tests/test_vector.i: tests/test_vector.cpp.i
-.PHONY : tests/test_vector.i
-
-# target to preprocess a source file
-tests/test_vector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector.cpp.i
-.PHONY : tests/test_vector.cpp.i
-
-tests/test_vector.s: tests/test_vector.cpp.s
-.PHONY : tests/test_vector.s
-
-# target to generate assembly for a file
-tests/test_vector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector.cpp.s
-.PHONY : tests/test_vector.cpp.s
-
-tests/test_vector_functional.obj: tests/test_vector_functional.cpp.obj
-.PHONY : tests/test_vector_functional.obj
-
-# target to build an object file
-tests/test_vector_functional.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector_functional.cpp.obj
-.PHONY : tests/test_vector_functional.cpp.obj
-
-tests/test_vector_functional.i: tests/test_vector_functional.cpp.i
-.PHONY : tests/test_vector_functional.i
-
-# target to preprocess a source file
-tests/test_vector_functional.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector_functional.cpp.i
-.PHONY : tests/test_vector_functional.cpp.i
-
-tests/test_vector_functional.s: tests/test_vector_functional.cpp.s
-.PHONY : tests/test_vector_functional.s
-
-# target to generate assembly for a file
-tests/test_vector_functional.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/tests/test_vector_functional.cpp.s
-.PHONY : tests/test_vector_functional.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -383,30 +287,18 @@ help:
 	@echo ... tests/run_all_tests.obj
 	@echo ... tests/run_all_tests.i
 	@echo ... tests/run_all_tests.s
-	@echo ... tests/test_complex.obj
-	@echo ... tests/test_complex.i
-	@echo ... tests/test_complex.s
-	@echo ... tests/test_matrix.obj
-	@echo ... tests/test_matrix.i
-	@echo ... tests/test_matrix.s
-	@echo ... tests/test_range_filters.obj
-	@echo ... tests/test_range_filters.i
-	@echo ... tests/test_range_filters.s
-	@echo ... tests/test_result_info.obj
-	@echo ... tests/test_result_info.i
-	@echo ... tests/test_result_info.s
-	@echo ... tests/test_square_matrix.obj
-	@echo ... tests/test_square_matrix.i
-	@echo ... tests/test_square_matrix.s
+	@echo ... tests/test_heap_sorter.obj
+	@echo ... tests/test_heap_sorter.i
+	@echo ... tests/test_heap_sorter.s
+	@echo ... tests/test_lazy_sequence.obj
+	@echo ... tests/test_lazy_sequence.i
+	@echo ... tests/test_lazy_sequence.s
+	@echo ... tests/test_streams.obj
+	@echo ... tests/test_streams.i
+	@echo ... tests/test_streams.s
 	@echo ... tests/test_utils.obj
 	@echo ... tests/test_utils.i
 	@echo ... tests/test_utils.s
-	@echo ... tests/test_vector.obj
-	@echo ... tests/test_vector.i
-	@echo ... tests/test_vector.s
-	@echo ... tests/test_vector_functional.obj
-	@echo ... tests/test_vector_functional.i
-	@echo ... tests/test_vector_functional.s
 .PHONY : help
 
 
