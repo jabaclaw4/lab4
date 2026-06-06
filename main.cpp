@@ -431,7 +431,7 @@ int main() {
                     ReadOnlyStream<int>  in(g_lazy, len);
                     WriteOnlyStream<int> out(&output);
                     in.Open(); out.Open();
-                    HeapSorter<int> sorter([](int a, int b){ return a < b; });
+                    HeapSorter<int> sorter([](const int& a, const int& b){ return a < b; });
                     sorter.Sort(in, out);
                     in.Close(); out.Close();
                     cout << "Sorted: [ ";
@@ -466,11 +466,13 @@ int main() {
                 WriteOnlyStream<int> out(&output);
                 in.Open(); out.Open();
                 bool asc = (choice == 22);
-                HeapSorter<int> sorter(asc
-                                       ? function<bool(const int&,const int&)>([](int a, int b){ return a < b; })
-                                       : function<bool(const int&,const int&)>([](int a, int b){ return a > b; })
-                );
-                sorter.Sort(in, out);
+                if (asc) {
+                    HeapSorter<int> sorter([](const int& a, const int& b){ return a < b; });
+                    sorter.Sort(in, out);
+                } else {
+                    HeapSorter<int> sorter([](const int& a, const int& b){ return a > b; });
+                    sorter.Sort(in, out);
+                }
                 in.Close(); out.Close();
                 cout << "Sorted " << (asc ? "ascending" : "descending") << ": [ ";
                 for (int i = 0; i < output.GetLength(); i++) {

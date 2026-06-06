@@ -4,25 +4,29 @@
 #include "BinaryHeap.h"
 #include "ReadOnlyStream.h"
 #include "WriteOnlyStream.h"
-#include <functional>
 #include <stdexcept>
 
+template <class T>
+bool sorterDefaultLess(const T& a, const T& b) {
+    return a < b;
+}
+
 //сортировка потока данных через бинарную кучу
-//читает из ReadOnlyStream сортирует пишет в WriteOnlyStream =)
+//читает из ReadOnlyStream сортирует пишет в WriteOnlyStream
 template <class T>
 class HeapSorter {
 private:
     //компаратор возвращает true если a меньш b
-    std::function<bool(const T&, const T&)> less;
+    bool (*less)(const T&, const T&);
 
 public:
     //конструктор по умолчанию сортировка по возрастанию
     HeapSorter()
-            : less([](const T& a, const T& b) { return a < b; }) {}
+            : less(sorterDefaultLess<T>) {}
 
     //конструктор с пользовательским компаратором
     //пример для сортировки по убыванию:
-    explicit HeapSorter(std::function<bool(const T&, const T&)> comparator)
+    explicit HeapSorter(bool (*comparator)(const T&, const T&))
             : less(comparator) {}
 
     //отсортировать поток
@@ -51,6 +55,25 @@ public:
 
         //извлекаем из кучи в выходной поток
         //каждый ExtractMin даёт следующий минимум след-но результат отсортирован
+        while (!heap.IsEmpty()) {
+            output.Write(heap.ExtractMin());
+        }
+    }
+
+    void Sort(ReadOnlyStream<T>& input,
+              WriteOnlyStream<T>& output,
+              bool (*comparator)(const T&, const T&),
+              int maxElements = -1) {
+        BinaryHeap<T> heap(comparator);
+        int read = 0;
+        while (!input.IsEndOfStream()) {
+            if (maxElements != -1 && read >= maxElements) break;
+            heap.Insert(input.Read());
+            read++;
+        }
+        if (read == 0) {
+            throw std::runtime_error("input stream is empty");
+        }
         while (!heap.IsEmpty()) {
             output.Write(heap.ExtractMin());
         }

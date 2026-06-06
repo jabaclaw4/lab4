@@ -2,8 +2,13 @@
 #define BINARY_HEAP_H
 
 #include "MutableArraySequence.h"
-#include <functional>
 #include <stdexcept>
+
+template <class T>
+bool defaultLess(const T& a, const T& b) {
+    return a < b;
+}
+
 //сама сортировочка
 //минимальная бинарная куча (min-heap) родитель всегда <= детей значит минимум всегда на вершине
 template <class T>
@@ -12,7 +17,7 @@ private:
     MutableArraySequence<T> data;
     //логический размер кучи элементы за этой границей игнорируются
     int heapSize; //физически массив не уменьшается просто колво которое видит куча
-    std::function<bool(const T&, const T&)> less;//определяет че значит меньше
+    bool (*less)(const T&, const T&); //определяет че значит меньше
 
     int parentIndex(int i) const {
         return (i - 1) / 2;
@@ -38,9 +43,7 @@ private:
         }
     }
 
-    //теперь siftDown использует heapSize а не data.GetLength()
-    //именно поэтому ExtractMin больше не пересоздаёт массив —
-    //просто уменьшаем heapSize и элемент "исчезает" логически
+    //ExtractMin не пересоздаёт массив просто уменьшаем heapSize и элемент исчезает логически
     void siftDown(int i) {
         while (true) {
             int left = leftChild(i);
@@ -71,10 +74,9 @@ private:
 
 public:
     BinaryHeap()
-            : heapSize(0),
-              less([](const T& a, const T& b) { return a < b; }) {}
+            : heapSize(0), less(defaultLess<T>) {}
 
-    explicit BinaryHeap(std::function<bool(const T&, const T&)> comparator)
+    explicit BinaryHeap(bool (*comparator)(const T&, const T&))
             : heapSize(0), less(comparator) {}
 
     //добавить элемент

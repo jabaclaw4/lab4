@@ -1,5 +1,5 @@
 CMakeFiles/lab3.dir/tests/run_all_tests.cpp.obj: \
- C:\Users\User\CLionProjects\lab4\tests\run_all_tests.cpp \
+ C:\Users\jabaclaw4\lab4last\tests\run_all_tests.cpp \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \

@@ -39,7 +39,7 @@ void run_test_heap_sorter() {
     emptyIn.Open(); emptyWs.Open();
     bool threw = false;
     try {
-        HeapSorter<int> emptySorter([](int a, int b){ return a < b; });
+        HeapSorter<int> emptySorter([](const int& a, const int& b){ return a < b; });
         emptySorter.Sort(emptyIn, emptyWs);
     } catch (const std::runtime_error&) {
         threw = true;
@@ -49,7 +49,6 @@ void run_test_heap_sorter() {
     check(threw, "sort empty: throws runtime_error");
 
     //один элемент
-
     MutableArraySequence<int> single;
     single.Append(42);
     ReadOnlyStream<int> singleIn(&single);
@@ -57,7 +56,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> singleWs(&singleOut);
 
     singleIn.Open(); singleWs.Open();
-    HeapSorter<int> singleSorter([](int a, int b){ return a < b; });
+    HeapSorter<int> singleSorter([](const int& a, const int& b){ return a < b; });
     singleSorter.Sort(singleIn, singleWs);
     singleIn.Close(); singleWs.Close();
 
@@ -74,7 +73,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> sortedWs(&sortedOut);
 
     sortedIn.Open(); sortedWs.Open();
-    HeapSorter<int> sortedSorter([](int a, int b){ return a < b; });
+    HeapSorter<int> sortedSorter([](const int& a, const int& b){ return a < b; });
     sortedSorter.Sort(sortedIn, sortedWs);
     sortedIn.Close(); sortedWs.Close();
 
@@ -91,7 +90,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> revWs(&revOut);
 
     revIn.Open(); revWs.Open();
-    HeapSorter<int> revSorter([](int a, int b){ return a < b; });
+    HeapSorter<int> revSorter([](const int& a, const int& b){ return a < b; });
     revSorter.Sort(revIn, revWs);
     revIn.Close(); revWs.Close();
 
@@ -109,7 +108,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> dupWs(&dupOut);
 
     dupIn.Open(); dupWs.Open();
-    HeapSorter<int> dupSorter([](int a, int b){ return a < b; });
+    HeapSorter<int> dupSorter([](const int& a, const int& b){ return a < b; });
     dupSorter.Sort(dupIn, dupWs);
     dupIn.Close(); dupWs.Close();
 
@@ -128,7 +127,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> descWs(&descOut);
 
     descIn.Open(); descWs.Open();
-    HeapSorter<int> descSorter([](int a, int b){ return a > b; });
+    HeapSorter<int> descSorter([](const int& a, const int& b){ return a > b; });
     descSorter.Sort(descIn, descWs);
     descIn.Close(); descWs.Close();
 
@@ -144,7 +143,7 @@ void run_test_heap_sorter() {
     WriteOnlyStream<int> rand1kWs(&rand1kOut);
 
     rand1kIn.Open(); rand1kWs.Open();
-    HeapSorter<int> rand1kSorter([](int a, int b){ return a < b; });
+    HeapSorter<int> rand1kSorter([](const int& a, const int& b){ return a < b; });
     rand1kSorter.Sort(rand1kIn, rand1kWs);
     rand1kIn.Close(); rand1kWs.Close();
 
@@ -169,7 +168,7 @@ void run_test_heap_sorter() {
         WriteOnlyStream<int> out(&output);
 
         in.Open(); out.Open();
-        HeapSorter<int> perfSorter([](int a, int b){ return a < b; });
+        HeapSorter<int> perfSorter([](const int& a, const int& b){ return a < b; });
         auto t1 = high_resolution_clock::now();
         perfSorter.Sort(in, out);
         auto t2 = high_resolution_clock::now();

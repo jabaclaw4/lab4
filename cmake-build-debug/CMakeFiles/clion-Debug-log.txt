@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion2024.1.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S C:\Users\User\CLionProjects\lab4 -B C:\Users\User\CLionProjects\lab4\cmake-build-debug
+"C:\Program Files\JetBrains\CLion2024.1.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S C:\Users\jabaclaw4\lab4last -B C:\Users\jabaclaw4\lab4last\cmake-build-debug
 CMake Deprecation Warning:
   Support for "Extra Generators" like
 
@@ -20,6 +20,6 @@ CMake Deprecation Warning:
 -- Check for working CXX compiler: C:/Program Files/JetBrains/CLion2024.1.4/bin/mingw/bin/g++.exe - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (3.1s)
+-- Configuring done (2.3s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/User/CLionProjects/lab4/cmake-build-debug
+-- Build files have been written to: C:/Users/jabaclaw4/lab4last/cmake-build-debug

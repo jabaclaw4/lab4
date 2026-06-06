@@ -1,5 +1,4 @@
-CMakeFiles/lab3.dir/main.cpp.obj: \
- C:\Users\User\CLionProjects\lab4\main.cpp \
+CMakeFiles/lab3.dir/main.cpp.obj: C:\Users\jabaclaw4\lab4last\main.cpp \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -144,13 +143,13 @@ CMakeFiles/lab3.dir/main.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/istream.tcc \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
- C:\Users\User\CLionProjects\lab4\src/LazySequence.h \
- C:\Users\User\CLionProjects\lab4\src/Sequence.h \
- C:\Users\User\CLionProjects\lab4\src/ResultInfo.h \
- C:\Users\User\CLionProjects\lab4\src/MutableArraySequence.h \
- C:\Users\User\CLionProjects\lab4\src/ArraySequenceBase.h \
- C:\Users\User\CLionProjects\lab4\src/DynamicArray.h \
- C:\Users\User\CLionProjects\lab4\src/Generator.h \
+ C:\Users\jabaclaw4\lab4last\src/LazySequence.h \
+ C:\Users\jabaclaw4\lab4last\src/Sequence.h \
+ C:\Users\jabaclaw4\lab4last\src/ResultInfo.h \
+ C:\Users\jabaclaw4\lab4last\src/MutableArraySequence.h \
+ C:\Users\jabaclaw4\lab4last\src/ArraySequenceBase.h \
+ C:\Users\jabaclaw4\lab4last\src/DynamicArray.h \
+ C:\Users\jabaclaw4\lab4last\src/Generator.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/functional \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_function.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_map \
@@ -173,21 +172,21 @@ CMakeFiles/lab3.dir/main.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_heap.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uniform_int_dist.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tempbuf.h \
- C:\Users\User\CLionProjects\lab4\src/Cardinal.h \
- C:\Users\User\CLionProjects\lab4\src/Generator.h \
- C:\Users\User\CLionProjects\lab4\src/BinaryHeap.h \
- C:\Users\User\CLionProjects\lab4\src/HeapSorter.h \
- C:\Users\User\CLionProjects\lab4\src/BinaryHeap.h \
- C:\Users\User\CLionProjects\lab4\src/ReadOnlyStream.h \
- C:\Users\User\CLionProjects\lab4\src/LazySequence.h \
+ C:\Users\jabaclaw4\lab4last\src/Cardinal.h \
+ C:\Users\jabaclaw4\lab4last\src/Generator.h \
+ C:\Users\jabaclaw4\lab4last\src/BinaryHeap.h \
+ C:\Users\jabaclaw4\lab4last\src/HeapSorter.h \
+ C:\Users\jabaclaw4\lab4last\src/BinaryHeap.h \
+ C:\Users\jabaclaw4\lab4last\src/ReadOnlyStream.h \
+ C:\Users\jabaclaw4\lab4last\src/LazySequence.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/fstream \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/codecvt.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
  C:/Program\ Files/JetBrains/CLion2024.1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fstream.tcc \
- C:\Users\User\CLionProjects\lab4\src/WriteOnlyStream.h \
- C:\Users\User\CLionProjects\lab4\src/ReadOnlyStream.h \
- C:\Users\User\CLionProjects\lab4\src/WriteOnlyStream.h \
- C:\Users\User\CLionProjects\lab4\src/MutableArraySequence.h \
- C:\Users\User\CLionProjects\lab4\src/Cardinal.h \
- C:\Users\User\CLionProjects\lab4\src/all_tests.h
+ C:\Users\jabaclaw4\lab4last\src/WriteOnlyStream.h \
+ C:\Users\jabaclaw4\lab4last\src/ReadOnlyStream.h \
+ C:\Users\jabaclaw4\lab4last\src/WriteOnlyStream.h \
+ C:\Users\jabaclaw4\lab4last\src/MutableArraySequence.h \
+ C:\Users\jabaclaw4\lab4last\src/Cardinal.h \
+ C:\Users\jabaclaw4\lab4last\src/all_tests.h

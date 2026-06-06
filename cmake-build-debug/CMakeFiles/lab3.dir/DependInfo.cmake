@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/User/CLionProjects/lab4/main.cpp" "CMakeFiles/lab3.dir/main.cpp.obj" "gcc" "CMakeFiles/lab3.dir/main.cpp.obj.d"
-  "C:/Users/User/CLionProjects/lab4/tests/run_all_tests.cpp" "CMakeFiles/lab3.dir/tests/run_all_tests.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/run_all_tests.cpp.obj.d"
-  "C:/Users/User/CLionProjects/lab4/tests/test_heap_sorter.cpp" "CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.obj.d"
-  "C:/Users/User/CLionProjects/lab4/tests/test_lazy_sequence.cpp" "CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.obj.d"
-  "C:/Users/User/CLionProjects/lab4/tests/test_streams.cpp" "CMakeFiles/lab3.dir/tests/test_streams.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_streams.cpp.obj.d"
-  "C:/Users/User/CLionProjects/lab4/tests/test_utils.cpp" "CMakeFiles/lab3.dir/tests/test_utils.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_utils.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/main.cpp" "CMakeFiles/lab3.dir/main.cpp.obj" "gcc" "CMakeFiles/lab3.dir/main.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/tests/run_all_tests.cpp" "CMakeFiles/lab3.dir/tests/run_all_tests.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/run_all_tests.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/tests/test_heap_sorter.cpp" "CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_heap_sorter.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/tests/test_lazy_sequence.cpp" "CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_lazy_sequence.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/tests/test_streams.cpp" "CMakeFiles/lab3.dir/tests/test_streams.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_streams.cpp.obj.d"
+  "C:/Users/jabaclaw4/lab4last/tests/test_utils.cpp" "CMakeFiles/lab3.dir/tests/test_utils.cpp.obj" "gcc" "CMakeFiles/lab3.dir/tests/test_utils.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
